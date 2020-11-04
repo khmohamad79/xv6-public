@@ -89,3 +89,13 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// global read syscall counter
+int readcount = 0;
+
+// returns how many times syscall read has been called.
+int
+sys_getreadcount(void)
+{
+  return readcount;
+}
