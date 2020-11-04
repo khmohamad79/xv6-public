@@ -3,8 +3,9 @@
 #include "user.h"
 
 int
-main(void)
+main(int argc, char *argv[])
 {
-  printf(1, "Hi, the number of read syscall is %d so far!\n", getreadcount());
+  int rdc = getreadcount();
+  printf(1, "Hi, the number of read syscall is %d so far!\n", rdc);
   exit();
 }
