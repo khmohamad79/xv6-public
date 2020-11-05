@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "spinlock.h"
 
 int
 sys_fork(void)
@@ -92,10 +93,14 @@ sys_uptime(void)
 
 // global read syscall counter
 int readcount = 0;
+struct spinlock readcountlock;
 
 // returns how many times syscall read has been called.
 int
 sys_getreadcount(void)
 {
-  return readcount;
+  acquire(&readcountlock);
+  int temp = readcount;
+  release(&readcountlock);
+  return temp;
 }

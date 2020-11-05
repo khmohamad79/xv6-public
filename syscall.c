@@ -105,6 +105,7 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_getreadcount(void);
 extern int readcount;
+extern struct spinlock readcountlock;
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -139,7 +140,9 @@ syscall(void)
 
   num = curproc->tf->eax;
   if(num==SYS_read) {
+    acquire(&readcountlock);
     readcount++;
+    release(&readcountlock);
   }
   
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
